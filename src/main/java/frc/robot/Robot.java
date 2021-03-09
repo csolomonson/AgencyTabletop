@@ -11,10 +11,15 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.XboxController;
+
 
 
 
@@ -34,6 +39,14 @@ public class Robot extends TimedRobot {
 
   WPI_TalonFX Falcon500;
   XboxController Xbox = new XboxController(0);
+  
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("vision");
+  NetworkTableEntry bw = table.getEntry("bw");
+  NetworkTableEntry bh = table.getEntry("bh");
+  NetworkTableEntry bx = table.getEntry("bx");
+  NetworkTableEntry by = table.getEntry("by");
+  NetworkTableEntry bv = table.getEntry("bv");
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -47,6 +60,8 @@ public class Robot extends TimedRobot {
 
     Falcon500 = new WPI_TalonFX(3);
     Falcon500.set(ControlMode.PercentOutput, 0);
+
+    
 
 
   }
@@ -116,6 +131,25 @@ public class Robot extends TimedRobot {
       } else {
           Falcon500.set(0);
       }
+
+      double w = bw.getDouble(0.0);
+      double h = bh.getDouble(0.0);
+      double x = bx.getDouble(0.0);
+      double y = by.getDouble(0.0);
+      boolean v = bv.getBoolean(false);
+
+      SmartDashboard.putNumber("Width", w);
+      SmartDashboard.putNumber("Height", h);
+      SmartDashboard.putNumber("Center-x", x);
+      SmartDashboard.putNumber("Center-y", y);
+      SmartDashboard.putBoolean("isValid", v);
+      //System.out.println(w);
+
+      
+
+      
+      
+
   }
 
   /**
