@@ -10,6 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.SPI;
+
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -19,6 +21,8 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.XboxController;
+
+import com.kauailabs.navx.frc.AHRS;
 
 
 
@@ -47,6 +51,8 @@ public class Robot extends TimedRobot {
   NetworkTableEntry by = table.getEntry("by");
   NetworkTableEntry bv = table.getEntry("bv");
 
+  AHRS ahrs;
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -60,6 +66,8 @@ public class Robot extends TimedRobot {
 
     Falcon500 = new WPI_TalonFX(3);
     Falcon500.set(ControlMode.PercentOutput, 0);
+
+    ahrs = new AHRS(SPI.Port.kMXP); 
 
     
 
@@ -138,17 +146,17 @@ public class Robot extends TimedRobot {
       double y = by.getDouble(0.0);
       boolean v = bv.getBoolean(false);
 
+      SmartDashboard.putNumber("Yaw", ahrs.getYaw());
+      SmartDashboard.putNumber("Roll", ahrs.getRoll());
+      SmartDashboard.putNumber("Pitch", ahrs.getPitch());
+
       SmartDashboard.putNumber("Width", w);
       SmartDashboard.putNumber("Height", h);
       SmartDashboard.putNumber("Center-x", x);
       SmartDashboard.putNumber("Center-y", y);
       SmartDashboard.putBoolean("isValid", v);
-      //System.out.println(w);
 
-      
-
-      
-      
+      SmartDashboard.putData("Heading", ahrs);
 
   }
 
